@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Explosión">
+  <radialGradient id="exp" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#fff7d6"/>
+    <stop offset="35%" stop-color="#fbbf24"/>
+    <stop offset="100%" stop-color="#ef4444"/>
+  </radialGradient>
+  <circle cx="60" cy="60" r="36" fill="url(#exp)" opacity="0.95"/>
+  <path d="M60 10 L66 44 L100 60 L66 76 L60 110 L54 76 L20 60 L54 44 Z" fill="#f97316" opacity="0.8"/>
+</svg>

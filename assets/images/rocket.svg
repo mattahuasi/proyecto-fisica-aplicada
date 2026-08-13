@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Nave">
+  <defs>
+    <linearGradient id="rocketGrad" x1="0" x2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="40%" stop-color="#d9e6f8"/>
+      <stop offset="100%" stop-color="#8ea5c1"/>
+    </linearGradient>
+  </defs>
+  <path d="M60 14 L84 52 L60 96 L36 52 Z" fill="url(#rocketGrad)" stroke="#fefefe" stroke-width="4"/>
+  <circle cx="60" cy="40" r="10" fill="#7dd3fc" opacity="0.9"/>
+  <path d="M48 66 L60 84 L72 66" fill="none" stroke="#7dd3fc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

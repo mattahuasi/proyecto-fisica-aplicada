@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Persona">
+  <circle cx="60" cy="24" r="16" fill="#f8d5a8"/>
+  <path d="M60 42 L50 72 L38 90 M60 42 L72 72 L82 90 M48 50 L30 60" fill="none" stroke="#7dd3fc" stroke-width="8" stroke-linecap="round"/>
+  <path d="M72 50 L90 60" fill="none" stroke="#7dd3fc" stroke-width="8" stroke-linecap="round"/>
+  <path d="M38 90 L52 90 M82 90 L68 90" fill="none" stroke="#a78bfa" stroke-width="8" stroke-linecap="round"/>
+</svg>

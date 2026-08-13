@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Caja">
+  <defs>
+    <linearGradient id="boxGrad" x1="0" x2="1">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="40%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+  <rect x="18" y="30" width="84" height="64" rx="14" fill="url(#boxGrad)" stroke="#fff7d6" stroke-width="4"/>
+  <path d="M18 44 H102" stroke="#fff7d6" stroke-width="4" opacity="0.8"/>
+  <path d="M46 30 V94 M74 30 V94" stroke="#a16207" stroke-width="4" opacity="0.7"/>
+</svg>

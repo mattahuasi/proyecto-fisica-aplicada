@@ -1,0 +1,99 @@
+body {
+  padding: 18px 0 32px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #2b8df8, #1458ce);
+  color: white;
+}
+.btn-secondary {
+  background: linear-gradient(180deg, #7c3aed, #4c1d95);
+  color: white;
+}
+.btn-copy {
+  background: linear-gradient(180deg, #10b981, #047857);
+  color: white;
+}
+
+.code-panel {
+  background: rgba(5, 13, 23, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 22px 42px rgba(0, 0, 0, 0.35);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  padding: 14px 18px;
+}
+
+.code-header span {
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+pre {
+  margin: 0;
+  padding: 18px 20px 22px;
+  overflow-x: auto;
+  color: #dfeaf9;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 16, 28, 0.96),
+    rgba(7, 11, 18, 0.98)
+  );
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.status {
+  margin-top: 12px;
+  color: #9cc8ff;
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .page-header {
+    align-items: flex-start;
+  }
+  .actions {
+    width: 100%;
+  }
+  .actions button {
+    flex: 1 1 140px;
+  }
+  .code-header {
+    align-items: flex-start;
+  }
+}

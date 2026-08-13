@@ -632,20 +632,15 @@ h1 {
     margin-inline: auto;
   }
   #meta-caja {
-    left: auto;
-    right: 16px;
     width: 78px;
   }
   #caja-wrapper {
     left: 12px;
   }
   #diana {
-    left: auto;
-    right: 12px;
     width: 32px;
   }
   #canon {
-    left: 12px;
     width: 34px;
   }
 }

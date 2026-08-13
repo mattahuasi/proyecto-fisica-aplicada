@@ -29,12 +29,22 @@ function sceneYPx(value) {
   return Math.round(value * (box.clientHeight / 300));
 }
 
-function sceneObjectPx(value) {
+function sceneWidthPx(value) {
   const box = document.querySelector(".anim-box");
   if (!box) return value;
-  const scaleX = box.clientWidth / 600;
-  const scaleY = box.clientHeight / 300;
-  return Math.round(value * Math.max(scaleX, scaleY));
+  return Math.round(value * (box.clientWidth / 600));
+}
+
+function sceneHeightPx(value) {
+  const box = document.querySelector(".anim-box");
+  if (!box) return value;
+  return Math.round(value * (box.clientHeight / 300));
+}
+
+function sceneUnitPx(value) {
+  const box = document.querySelector(".anim-box");
+  if (!box) return value;
+  return Math.round(value * Math.min(box.clientWidth / 600, box.clientHeight / 300));
 }
 
 function sceneX(value) {
@@ -70,42 +80,46 @@ function ajustarEscena() {
     pisoMeta.style.width = `${scenePx(140)}px`;
   }
   if (cable) {
-    const cableWidth = scenePx(4);
-    cable.style.left = `${sceneX(265) + Math.round((sceneObjectPx(70) - cableWidth) / 2)}px`;
+    const cableWidth = sceneWidthPx(4);
+    cable.style.left = `${sceneX(265) + Math.round((sceneWidthPx(70) - cableWidth) / 2)}px`;
     cable.style.width = `${cableWidth}px`;
   }
   if (cabina) {
     cabina.style.left = `${sceneX(265)}px`;
-    cabina.style.width = `${sceneObjectPx(70)}px`;
-    cabina.style.height = `${sceneObjectPx(60)}px`;
+    cabina.style.width = `${sceneWidthPx(70)}px`;
+    cabina.style.height = `${sceneHeightPx(60)}px`;
   }
   if (metaCaja) {
     metaCaja.style.left = `${sceneX(450)}px`;
-    metaCaja.style.width = `${sceneObjectPx(100)}px`;
-    metaCaja.style.height = `${sceneObjectPx(60)}px`;
+    metaCaja.style.width = `${sceneWidthPx(100)}px`;
+    metaCaja.style.height = `${sceneHeightPx(60)}px`;
   }
   if (cajaWrap) cajaWrap.style.left = `${sceneX(20)}px`;
   if (cohete) {
     cohete.style.left = `${sceneX(275)}px`;
-    cohete.style.width = `${sceneObjectPx(50)}px`;
-    cohete.style.height = `${sceneObjectPx(60)}px`;
+    cohete.style.width = `${sceneWidthPx(50)}px`;
+    cohete.style.height = `${sceneHeightPx(60)}px`;
   }
   if (fuego) {
-    fuego.style.left = `${sceneX(275) + Math.round((sceneObjectPx(50) - sceneObjectPx(20)) / 2)}px`;
-    fuego.style.width = `${sceneObjectPx(20)}px`;
-    fuego.style.height = `${sceneObjectPx(30)}px`;
+    fuego.style.left = `${sceneX(275) + Math.round((sceneWidthPx(50) - sceneWidthPx(20)) / 2)}px`;
+    fuego.style.width = `${sceneWidthPx(20)}px`;
+    fuego.style.height = `${sceneHeightPx(30)}px`;
   }
   if (canon) {
     canon.style.left = `${sceneX(10)}px`;
-    canon.style.width = `${sceneObjectPx(40)}px`;
+    canon.style.width = `${sceneWidthPx(40)}px`;
+    canon.style.height = `${sceneHeightPx(10)}px`;
   }
   if (proyectil) {
     proyectil.style.left = `${sceneX(10)}px`;
     proyectil.style.bottom = `${sceneYPx(10)}px`;
+    proyectil.style.width = `${sceneWidthPx(15)}px`;
+    proyectil.style.height = `${sceneHeightPx(15)}px`;
   }
   if (diana) {
     diana.style.left = `${sceneX(450)}px`;
-    diana.style.width = `${sceneObjectPx(40)}px`;
+    diana.style.width = `${sceneWidthPx(40)}px`;
+    diana.style.height = `${sceneHeightPx(10)}px`;
   }
 }
 
@@ -315,8 +329,8 @@ function procesarTrama(trama) {
     const cajaBox = document.getElementById("caja-fisica");
 
     personaje.style.display = "none";
-    cajaBox.style.width = `${sceneObjectPx(60)}px`;
-    cajaBox.style.height = `${sceneObjectPx(60)}px`;
+    cajaBox.style.width = `${sceneWidthPx(60)}px`;
+    cajaBox.style.height = `${sceneHeightPx(60)}px`;
     cajaWrap.style.left = `${scenePx(20 + animX * 4.3)}px`;
 
     if (led === "R") {

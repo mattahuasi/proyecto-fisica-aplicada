@@ -31,12 +31,10 @@ proyecto-fisica-aplicada/
 │  ├─ css/
 │  │  ├─ base.css
 │  │  ├─ index.css
-│  │  ├─ simulator.css
-│  │  └─ code-viewer.css
+│  │  └─ simulator.css
 │  ├─ js/
 │  │  ├─ index.js
 │  │  ├─ simulator.js
-│  │  ├─ code-viewer.js
 │  │  └─ particles.js
 │  └─ images/
 │     ├─ box.svg
@@ -46,8 +44,7 @@ proyecto-fisica-aplicada/
 │     ├─ runner.svg
 │     └─ explosion.svg
 ├─ pages/
-│  ├─ simulator.html           # Simulación local
-│  └─ code-viewer.html         # Visor del firmware
+│  └─ simulator.html           # Simulación local
 └─ firmware/
    └─ main.ino                 # Firmware Arduino
 ```
@@ -60,7 +57,6 @@ flowchart LR
     C[pages/simulator.html<br/>Modo simulado] --> D[Motor JS local]
     A --> E[Panel visual + LCD virtual]
     C --> E
-    F[pages/code-viewer.html] --> G[Lectura de firmware/main.ino]
 ```
 
 ## Tecnologías
@@ -97,13 +93,11 @@ Luego abre:
 
 - `http://localhost:8000/index.html`
 - `http://localhost:8000/pages/simulator.html`
-- `http://localhost:8000/pages/code-viewer.html`
 
 ## Navegación interna
 
-- Desde `index.html` puedes ir a simulador y visor de código.
-- Desde `pages/simulator.html` puedes volver al modo real y abrir visor.
-- Desde `pages/code-viewer.html` puedes volver a inicio o simulador.
+- Desde `index.html` puedes ir al simulador o ver el código en GitHub.
+- Desde `pages/simulator.html` puedes volver al modo real o ver el código en GitHub.
 
 ## Despliegue
 

@@ -1012,7 +1012,6 @@
 
       #cabina,
       #cohete,
-      #caja-fisica,
       #proyectil {
         animation: floaty 4.5s ease-in-out infinite;
       }
@@ -1046,6 +1045,220 @@
           grid-template-columns: 1fr;
         }
       }
+
+      /* Panel de laboratorio: organización visual sin alterar controles. */
+      .lab-toolbar {
+        width: min(1120px, calc(100% - 30px));
+        margin: 0 auto 18px;
+        padding: 14px;
+        justify-content: stretch;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 48px;
+      }
+
+      .toolbar-identity {
+        padding: 0 8px;
+        border-right: 1px solid rgba(148, 163, 184, 0.16);
+      }
+
+      .toolbar-caption {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .toolbar-games {
+        flex: 1 1 430px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(88px, 1fr));
+      }
+
+      .toolbar-actions {
+        margin-left: auto;
+      }
+
+      .lab-toolbar button {
+        min-height: 44px;
+        margin: 0;
+        padding: 9px 12px;
+        font-size: 13px;
+      }
+
+      .toolbar-games .btn-juego {
+        border: 1px solid rgba(147, 197, 253, 0.18);
+        border-radius: 10px;
+        box-shadow: none;
+      }
+
+      .toolbar-games .btn-juego.is-active {
+        box-shadow: 0 0 0 3px rgba(110, 231, 255, 0.17), 0 10px 20px rgba(0, 0, 0, 0.24);
+      }
+
+      .lab-layout {
+        width: min(1120px, calc(100% - 30px));
+        margin: 0 auto 30px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.85fr);
+        align-items: start;
+        gap: 18px;
+      }
+
+      .lab-stage {
+        padding: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(16, 24, 38, 0.78), rgba(9, 15, 25, 0.72));
+        box-shadow: 0 24px 42px rgba(0, 0, 0, 0.22);
+      }
+
+      .section-kicker {
+        margin: 0 0 8px;
+        color: #9fb3d1;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .lab-stage .sim-panel {
+        width: 100%;
+        margin: 0 0 18px;
+      }
+
+      .lab-stage .lcd-container {
+        width: min(100%, 430px);
+        margin: 0 auto 16px;
+      }
+
+      .lab-stage .anim-box {
+        width: 100%;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+
+      .lab-layout .info-panel {
+        width: auto;
+        margin: 0;
+        min-height: 100%;
+      }
+
+      @media (max-width: 920px) {
+        .lab-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .lab-layout .info-panel {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .lab-toolbar,
+        .lab-layout {
+          width: min(calc(100% - 24px), 600px);
+        }
+
+        .lab-toolbar {
+          padding: 10px;
+          margin-bottom: 12px;
+        }
+
+        .toolbar-group {
+          width: 100%;
+        }
+
+        .toolbar-identity {
+          justify-content: space-between;
+          padding: 2px 4px 10px;
+          border-right: 0;
+          border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+        }
+
+        .toolbar-games {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .toolbar-games .btn-juego {
+          width: 100%;
+          font-size: 12px;
+        }
+
+        .toolbar-actions {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          margin-left: 0;
+        }
+
+        .toolbar-actions button {
+          font-size: 11px;
+          padding-inline: 6px;
+        }
+
+        .lab-stage {
+          padding: 12px;
+          border-radius: 18px;
+        }
+
+        h1 {
+          margin-top: 0;
+          font-size: clamp(23px, 7vw, 29px);
+        }
+
+        .instrucciones {
+          margin: 0 auto 13px;
+          max-width: 36ch;
+        }
+
+        .section-kicker {
+          margin-bottom: 6px;
+        }
+
+        .info-panel {
+          padding: 14px;
+        }
+
+        .info-panel h3 {
+          font-size: 18px;
+        }
+
+        .sim-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 9px;
+        }
+
+        .control-card {
+          padding: 10px;
+        }
+
+        .control-row {
+          flex-wrap: wrap;
+          gap: 7px;
+        }
+
+        .value-pill {
+          min-width: 100%;
+        }
+
+        .press-button {
+          min-height: 52px;
+          font-size: 13px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .sim-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1056,34 +1269,27 @@
       estética y la respuesta visual.
     </div>
 
-    <div class="controles">
-      <span class="mode-badge mode-sim">Modo simulado</span>
-      <button class="btn-juego" data-juego="0" onclick="enviarComando('0')">
-        1. Ascensor
-      </button>
-      <button class="btn-juego" data-juego="1" onclick="enviarComando('1')">2. Caja</button>
-      <button class="btn-juego" data-juego="2" onclick="enviarComando('2')">
-        3. Aterrizaje
-      </button>
-      <button class="btn-juego" data-juego="3" onclick="enviarComando('3')">
-        4. Catapulta
-      </button>
-      <button class="btn-reset" onclick="enviarComando('R')">Reiniciar</button>
-      <button
-        class="btn-arduino"
-        onclick="window.location.href = '../index.html'"
-      >
-        Volver al Arduino
-      </button>
-      <button
-        class="btn-codigo"
-        onclick="window.open('https://github.com/mattahuasi/proyecto-fisica-aplicada', '_blank')"
-      >
-        Ver código
-      </button>
-    </div>
+    <section class="controles lab-toolbar" aria-label="Controles del simulador">
+      <div class="toolbar-group toolbar-identity">
+        <span class="mode-badge mode-sim">Modo simulado</span>
+        <span class="toolbar-caption">Práctica sin placa</span>
+      </div>
+      <div class="toolbar-group toolbar-games" aria-label="Seleccionar simulación">
+        <button class="btn-juego" data-juego="0" onclick="enviarComando('0')">1. Ascensor</button>
+        <button class="btn-juego" data-juego="1" onclick="enviarComando('1')">2. Caja</button>
+        <button class="btn-juego" data-juego="2" onclick="enviarComando('2')">3. Aterrizaje</button>
+        <button class="btn-juego" data-juego="3" onclick="enviarComando('3')">4. Catapulta</button>
+      </div>
+      <div class="toolbar-group toolbar-actions" aria-label="Acciones adicionales">
+        <button class="btn-reset" onclick="enviarComando('R')">Reiniciar</button>
+        <button class="btn-arduino" onclick="window.location.href = '../index.html'">Arduino real</button>
+        <button class="btn-codigo" onclick="window.open('https://github.com/mattahuasi/proyecto-fisica-aplicada', '_blank')">Ver código</button>
+      </div>
+    </section>
 
-    <div class="sim-panel">
+    <main class="lab-layout lab-layout-simulator">
+      <section class="lab-stage" aria-label="Controles y escena de simulación">
+        <div class="sim-panel">
       <h3>Simulador local</h3>
       <div class="sim-grid">
         <div class="control-card">
@@ -1108,14 +1314,15 @@
           </button>
         </div>
       </div>
-    </div>
+        </div>
 
-    <div id="pantallaLCD" class="lcd-container">
-      <div id="lcd-line1" class="lcd-line">SISTEMA LISTO.</div>
-      <div id="lcd-line2" class="lcd-line">SIMULADOR LOCAL.</div>
-    </div>
+        <p class="section-kicker">Estado del sistema</p>
+        <div id="pantallaLCD" class="lcd-container">
+          <div id="lcd-line1" class="lcd-line">SISTEMA LISTO.</div>
+          <div id="lcd-line2" class="lcd-line">SIMULADOR LOCAL.</div>
+        </div>
 
-    <div class="anim-box">
+        <div class="anim-box">
       <div id="ascensor-sys" class="sys-container">
         <div id="piso-meta"></div>
         <div id="cable"></div>
@@ -1138,9 +1345,10 @@
         <div id="proyectil"></div>
         <div id="diana"></div>
       </div>
-    </div>
+        </div>
+      </section>
 
-    <div class="info-panel" id="info-panel">
+      <aside class="info-panel" id="info-panel">
       <h3 id="info-titulo">Selecciona una simulación</h3>
       <p id="info-concepto">
         Presiona un botón arriba para cargar los parámetros de física.
@@ -1152,7 +1360,8 @@
         <div class="sem-card sem-verde" id="sem-txt-verde">V</div>
         <div class="sem-card sem-rojo" id="sem-txt-rojo">R</div>
       </div>
-    </div>
+      </aside>
+    </main>
 
     <script src="../assets/js/particles.js"></script>
     <script src="../assets/js/simulator.js"></script>

@@ -7,6 +7,7 @@ const uiLCD = document.getElementById("pantallaLCD");
 const uiLine1 = document.getElementById("lcd-line1");
 const uiLine2 = document.getElementById("lcd-line2");
 const uiInst = document.getElementById("txt-instrucciones");
+const imageAssetRoot = "assets/images/";
 
 function getSceneScale() {
   const box = document.querySelector(".anim-box");
@@ -31,12 +32,23 @@ function sceneYPx(value) {
   return Math.round(value * (box.clientHeight / 300));
 }
 
+function sceneObjectPx(value) {
+  const box = document.querySelector(".anim-box");
+  if (!box) return value;
+  const scaleX = box.clientWidth / 600;
+  const scaleY = box.clientHeight / 300;
+  return Math.round(value * Math.max(scaleX, scaleY));
+}
+
 function sceneX(value) {
   return getSceneOriginX() + scenePx(value);
 }
 
-function setSceneFigure(element, src, alt = "elemento") {
+function setSceneFigure(element, fileName, alt = "elemento") {
   if (!element) return;
+  const src = imageAssetRoot + fileName;
+  if (element.dataset.figureSrc === src) return;
+  element.dataset.figureSrc = src;
   element.innerHTML = `<img src="${src}" alt="${alt}" />`;
 }
 
@@ -61,34 +73,35 @@ function ajustarEscena() {
     pisoMeta.style.width = `${scenePx(140)}px`;
   }
   if (cable) {
-    cable.style.left = `${sceneX(298)}px`;
-    cable.style.width = `${scenePx(4)}px`;
+    const cableWidth = scenePx(4);
+    cable.style.left = `${sceneX(265) + Math.round((sceneObjectPx(70) - cableWidth) / 2)}px`;
+    cable.style.width = `${cableWidth}px`;
   }
   if (cabina) {
     cabina.style.left = `${sceneX(265)}px`;
-    cabina.style.width = `${scenePx(70)}px`;
-    cabina.style.height = `${sceneYPx(60)}px`;
-    cabina.style.fontSize = `${Math.min(scenePx(35), sceneYPx(35))}px`;
+    cabina.style.width = `${sceneObjectPx(70)}px`;
+    cabina.style.height = `${sceneObjectPx(60)}px`;
+    cabina.style.fontSize = `${sceneObjectPx(35)}px`;
   }
   if (metaCaja) {
     metaCaja.style.left = `${sceneX(450)}px`;
-    metaCaja.style.width = `${scenePx(100)}px`;
-    metaCaja.style.height = `${sceneYPx(60)}px`;
+    metaCaja.style.width = `${sceneObjectPx(100)}px`;
+    metaCaja.style.height = `${sceneObjectPx(60)}px`;
   }
   if (cajaWrap) cajaWrap.style.left = `${sceneX(20)}px`;
   if (cohete) {
     cohete.style.left = `${sceneX(275)}px`;
-    cohete.style.width = `${scenePx(50)}px`;
-    cohete.style.height = `${sceneYPx(60)}px`;
+    cohete.style.width = `${sceneObjectPx(50)}px`;
+    cohete.style.height = `${sceneObjectPx(60)}px`;
   }
   if (fuego) {
-    fuego.style.left = `${sceneX(290)}px`;
-    fuego.style.width = `${scenePx(20)}px`;
-    fuego.style.height = `${sceneYPx(30)}px`;
+    fuego.style.left = `${sceneX(275) + Math.round((sceneObjectPx(50) - sceneObjectPx(20)) / 2)}px`;
+    fuego.style.width = `${sceneObjectPx(20)}px`;
+    fuego.style.height = `${sceneObjectPx(30)}px`;
   }
   if (canon) {
     canon.style.left = `${sceneX(10)}px`;
-    canon.style.width = `${scenePx(40)}px`;
+    canon.style.width = `${sceneObjectPx(40)}px`;
   }
   if (proyectil) {
     proyectil.style.left = `${sceneX(10)}px`;
@@ -96,7 +109,7 @@ function ajustarEscena() {
   }
   if (diana) {
     diana.style.left = `${sceneX(450)}px`;
-    diana.style.width = `${scenePx(40)}px`;
+    diana.style.width = `${sceneObjectPx(40)}px`;
   }
 }
 
@@ -219,7 +232,7 @@ function procesarTrama(trama) {
     if (animY === -1) {
       cabina.style.top = `${sceneYPx(240)}px`;
       cable.style.height = "0px";
-      setSceneFigure(cabina, "assets/images/cabin-fail.svg", "Cabina fallida");
+      setSceneFigure(cabina, "cabin-fail.svg", "Cabina fallida");
       cabina.classList.add("status-fail");
     } else {
       const animacionVisualY = led === "R" ? (animY * animY) / 100 : animY;
@@ -229,8 +242,8 @@ function procesarTrama(trama) {
       setSceneFigure(
         cabina,
         led === "R"
-          ? "assets/images/cabin-fail.svg"
-          : "assets/images/cabin.svg",
+          ? "cabin-fail.svg"
+          : "cabin.svg",
         led === "R" ? "Cabina fallida" : "Cabina",
       );
       cabina.classList.toggle("status-fail", led === "R");
@@ -241,17 +254,17 @@ function procesarTrama(trama) {
     const personaje = document.getElementById("caja-personaje");
     const cajaBox = document.getElementById("caja-fisica");
 
+    personaje.style.display = "none";
+    cajaBox.style.width = `${sceneObjectPx(60)}px`;
+    cajaBox.style.height = `${sceneObjectPx(60)}px`;
     cajaWrap.style.left = `${scenePx(20 + animX * 4.3)}px`;
 
     if (led === "R") {
-      setSceneFigure(personaje, "assets/images/runner.svg", "Persona");
-      setSceneFigure(cajaBox, "assets/images/explosion.svg", "Explosión");
+      setSceneFigure(cajaBox, "explosion.svg", "Explosión");
     } else if (led === "V") {
-      setSceneFigure(personaje, "assets/images/runner.svg", "Persona");
-      setSceneFigure(cajaBox, "assets/images/box.svg", "Caja");
+      setSceneFigure(cajaBox, "box.svg", "Caja");
     } else {
-      setSceneFigure(personaje, "assets/images/runner.svg", "Persona");
-      setSceneFigure(cajaBox, "assets/images/box.svg", "Caja");
+      setSceneFigure(cajaBox, "box.svg", "Caja");
     }
   } else if (modo === "2") {
     document.getElementById("lander-sys").style.display = "block";
@@ -263,7 +276,7 @@ function procesarTrama(trama) {
     fuego.style.display = led !== "R" && animY > 0 ? "block" : "none";
     setSceneFigure(
       cohete,
-      led === "R" ? "assets/images/explosion.svg" : "assets/images/rocket.svg",
+      led === "R" ? "explosion.svg" : "rocket.svg",
       led === "R" ? "Explosión" : "Nave",
     );
   } else if (modo === "3") {

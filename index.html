@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Laboratorio de Física con Arduino</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #0d1117;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 15px;
+      }
+      h1 {
+        color: #58a6ff;
+        margin-bottom: 5px;
+      }
+      .instrucciones {
+        color: #8b949e;
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+
+      .controles {
+        background: #161b22;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+      button {
+        padding: 10px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        margin: 5px;
+        font-weight: bold;
+        transition: 0.2s;
+      }
+      button:hover {
+        filter: brightness(1.2);
+      }
+      .btn-conect {
+        background: #238636;
+        color: white;
+      }
+      .btn-desconect {
+        background: #da3633;
+        color: white;
+      }
+      .btn-juego {
+        background: #1f6feb;
+        color: white;
+      }
+      .btn-reset {
+        background: #d29922;
+        color: #000;
+        margin-left: 20px;
+      }
+
+      /* LCD Virtual */
+      .lcd-container {
+        background-color: #2b2b2b;
+        color: #fff;
+        font-family: "Courier New", Courier, monospace;
+        font-weight: bold;
+        font-size: 24px;
+        padding: 15px 25px;
+        border-radius: 8px;
+        border: 6px solid #000;
+        width: 330px;
+        margin: 0 auto 20px auto;
+        text-align: left;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.8);
+        letter-spacing: 2px;
+        transition: 0.3s;
+      }
+      .lcd-line {
+        white-space: pre;
+        height: 30px;
+        line-height: 30px;
+      }
+
+      /* Colores de Semáforo Físico */
+      .led-naranja {
+        background-color: #d97706 !important;
+        box-shadow: 0 0 25px #d97706 !important;
+      }
+      .led-verde {
+        background-color: #2ea043 !important;
+        box-shadow: 0 0 25px #2ea043 !important;
+      }
+      .led-rojo {
+        background-color: #da3633 !important;
+        box-shadow: 0 0 25px #da3633 !important;
+      }
+
+      /* Lienzo de Animación */
+      .anim-box {
+        width: 600px;
+        height: 300px;
+        background: #21262d;
+        margin: 0 auto 20px auto;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid #30363d;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .sys-container {
+        display: none;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+      }
+
+      /* Ascensor */
+      #piso-meta {
+        width: 140px;
+        height: 15px;
+        background: rgba(46, 160, 67, 0.3);
+        border: 2px dashed #2ea043;
+        position: absolute;
+        left: 230px;
+        top: 50px;
+        border-radius: 4px;
+      }
+      #cable {
+        width: 4px;
+        background: #8b949e;
+        position: absolute;
+        left: 298px;
+        top: 0;
+      }
+      #cabina {
+        width: 70px;
+        height: 60px;
+        background: #c9d1d9;
+        position: absolute;
+        left: 265px;
+        border-radius: 4px;
+        border: 2px solid #fff;
+        text-align: center;
+        font-size: 35px;
+        line-height: 60px;
+        transition: top 0.05s linear;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Caja y Fricción Directa por Potenciómetro */
+      #meta-caja {
+        width: 100px;
+        height: 60px;
+        background: rgba(46, 160, 67, 0.2);
+        border: 2px dashed #2ea043;
+        position: absolute;
+        left: 450px;
+        bottom: 0;
+        border-radius: 4px 4px 0 0;
+      }
+      #caja-wrapper {
+        position: absolute;
+        bottom: 0;
+        left: 20px;
+        font-size: 40px;
+        transition: left 0.05s linear;
+        display: flex;
+        align-items: flex-end;
+      }
+      #caja-fisica {
+        width: 60px;
+        height: 60px;
+        background: #d29922;
+        border: 2px solid #fff;
+        text-align: center;
+        line-height: 60px;
+        font-size: 35px;
+      }
+
+      /* Lander */
+      #luna {
+        width: 100%;
+        height: 20px;
+        background: #8b949e;
+        position: absolute;
+        bottom: 0;
+      }
+      #cohete {
+        width: 50px;
+        height: 60px;
+        background: #fff;
+        position: absolute;
+        left: 275px;
+        border-radius: 20px 20px 5px 5px;
+        text-align: center;
+        font-size: 35px;
+        line-height: 60px;
+      }
+      #fuego {
+        width: 20px;
+        height: 30px;
+        background: orange;
+        position: absolute;
+        left: 290px;
+        border-radius: 0 0 10px 10px;
+        display: none;
+      }
+
+      /* Catapulta */
+      #canon {
+        width: 40px;
+        height: 10px;
+        background: gray;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        transform-origin: left center;
+      }
+      #proyectil {
+        width: 15px;
+        height: 15px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+      }
+      #diana {
+        width: 40px;
+        height: 10px;
+        background: red;
+        position: absolute;
+        bottom: 0;
+        left: 450px;
+      }
+
+      .info-panel {
+        width: 600px;
+        background: #161b22;
+        margin: 0 auto 30px auto;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #30363d;
+        text-align: left;
+        box-sizing: border-box;
+      }
+      .info-panel h3 {
+        color: #58a6ff;
+        margin-top: 0;
+        border-bottom: 1px solid #30363d;
+        padding-bottom: 8px;
+      }
+      .info-panel p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #c9d1d9;
+        margin: 8px 0;
+      }
+      .formula-box {
+        background: #0d1117;
+        border-left: 4px solid #58a6ff;
+        padding: 10px 15px;
+        margin: 12px 0;
+        font-family: "Georgia", serif;
+        font-style: italic;
+        color: #79c0ff;
+        font-size: 16px;
+        border-radius: 0 4px 4px 0;
+      }
+      .formula-box sub {
+        font-size: 11px;
+      }
+      .formula-box sup {
+        font-size: 11px;
+      }
+      .semaforo-info {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .sem-card {
+        flex: 1;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .sem-naranja {
+        background: rgba(217, 119, 6, 0.2);
+        border: 1px solid #d97706;
+        color: #fbbf24;
+      }
+      .sem-verde {
+        background: rgba(46, 160, 67, 0.2);
+        border: 1px solid #2ea043;
+        color: #56d364;
+      }
+      .sem-rojo {
+        background: rgba(218, 54, 51, 0.2);
+        border: 1px solid #da3633;
+        color: #f85149;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Laboratorio Arduino - Física 1</h1>
+    <div class="instrucciones" id="txt-instrucciones">
+      Conecta el Arduino para comenzar.
+    </div>
+
+    <div class="controles">
+      <button id="btnConectar" class="btn-conect">🔌 Conectar Placa</button>
+      <button id="btnDesconectar" class="btn-desconect" disabled>
+        ❌ Desconectar
+      </button>
+      <span style="margin: 0 15px; color: #555">|</span>
+      <button class="btn-juego" onclick="enviarComando('0')">
+        1. Ascensor
+      </button>
+      <button class="btn-juego" onclick="enviarComando('1')">2. Caja</button>
+      <button class="btn-juego" onclick="enviarComando('2')">
+        3. Aterrizaje
+      </button>
+      <button class="btn-juego" onclick="enviarComando('3')">
+        4. Catapulta
+      </button>
+      <button class="btn-reset" onclick="enviarComando('R')">
+        🔄 Reiniciar
+      </button>
+    </div>
+
+    <div id="pantallaLCD" class="lcd-container">
+      <div id="lcd-line1" class="lcd-line">SISTEMA LISTO.</div>
+      <div id="lcd-line2" class="lcd-line">ESPERANDO DATOS.</div>
+    </div>
+
+    <div class="anim-box">
+      <div id="ascensor-sys" class="sys-container">
+        <div id="piso-meta"></div>
+        <div id="cable"></div>
+        <div id="cabina">👷</div>
+      </div>
+      <div id="friccion-sys" class="sys-container">
+        <div id="meta-caja"></div>
+        <div id="caja-wrapper">
+          <span id="caja-personaje">🏃‍♂️</span>
+          <div id="caja-fisica">📦</div>
+        </div>
+      </div>
+      <div id="lander-sys" class="sys-container">
+        <div id="cohete">🧑‍🚀</div>
+        <div id="fuego"></div>
+        <div id="luna"></div>
+      </div>
+      <div id="tiro-sys" class="sys-container">
+        <div id="canon"></div>
+        <div id="proyectil"></div>
+        <div id="diana"></div>
+      </div>
+    </div>
+
+    <div class="info-panel" id="info-panel">
+      <h3 id="info-titulo">Selecciona una simulación</h3>
+      <p id="info-concepto">
+        Presiona un botón arriba para cargar los parámetros de física.
+      </p>
+      <div class="formula-box" id="info-formula">Ecuaciones</div>
+      <p id="info-calculo"></p>
+      <div class="semaforo-info" id="info-semaforo" style="display: none">
+        <div class="sem-card sem-naranja" id="sem-txt-naranja">🟡</div>
+        <div class="sem-card sem-verde" id="sem-txt-verde">🟢</div>
+        <div class="sem-card sem-rojo" id="sem-txt-rojo">🔴</div>
+      </div>
+    </div>
+
+    <script>
+      let port = null,
+        writer = null,
+        reader = null,
+        keepReading = false;
+      let readableStreamClosed = null,
+        writableStreamClosed = null;
+
+      const uiLCD = document.getElementById("pantallaLCD");
+      const uiLine1 = document.getElementById("lcd-line1");
+      const uiLine2 = document.getElementById("lcd-line2");
+      const uiInst = document.getElementById("txt-instrucciones");
+
+      const datosFisica = {
+        0: {
+          titulo: "Juego 1: Elevador (Dinámica — Tensión en el cable)",
+          concepto:
+            "<b>Concepto:</b> Segunda Ley de Newton. Para subir la cabina hace falta más fuerza que el propio peso del sistema; si la tensión supera el límite del cable, este se rompe.",
+          formula:
+            "T = m·g + m·a &nbsp;&nbsp;|&nbsp;&nbsp; 400 N ≤ T<sub>meta</sub> ≤ 750 N",
+          calculo:
+            "<b>Cálculo:</b> Gira el potenciómetro para aplicar tensión (T) al cable y llevar la cabina al Piso 3. Si te pasas de 750 N, el cable se rompe y la cabina cae en caída libre.",
+          semNaranja: "🟡 T &lt; 400 N: Falta fuerza.",
+          semVerde: "🟢 400–750 N: Altura correcta.",
+          semRojo: "🔴 T &gt; 750 N: Cable roto (caída libre).",
+        },
+        1: {
+          titulo: "Juego 2: Empujar Caja (Dinámica — Rozamiento)",
+          concepto:
+            "<b>Concepto:</b> Rozamiento estático y dinámico. Mientras la fuerza aplicada no supere la fuerza de rozamiento, la caja no se mueve; al superarla, entra en movimiento.",
+          formula:
+            "F<sub>roz</sub> = μ·N = 200 N &nbsp;&nbsp;|&nbsp;&nbsp; x ∝ (F − F<sub>roz</sub>)",
+          calculo:
+            "<b>Cálculo:</b> Aplica más de 200 N para vencer el rozamiento y avanzar. Detén la caja dentro de la zona de meta verde; si empujas de más, se pasa y choca.",
+          semNaranja: "🟡 F ≤ 200 N: El rozamiento vence.",
+          semVerde: "🟢 Caja dentro de la meta.",
+          semRojo: "🔴 Exceso de impulso: se pasó de la meta.",
+        },
+        2: {
+          titulo: "Juego 3: Aterrizaje Lunar (Cinemática MRUA + Energía)",
+          concepto:
+            "<b>Concepto:</b> Movimiento Rectilíneo Uniformemente Acelerado (MRUA). El potenciómetro fija la aceleración de tus propulsores; la gravedad tira hacia abajo todo el tiempo. El semáforo en vuelo solo es un aviso de velocidad — el resultado real (verde o rojo) se decide recién al tocar el suelo.",
+          formula:
+            "a = a<sub>prop</sub> − g &nbsp;&nbsp;|&nbsp;&nbsp; v = v<sub>0</sub> + a·t &nbsp;&nbsp;|&nbsp;&nbsp; E<sub>c</sub> = ½·m·v<sup>2</sup>",
+          calculo:
+            "<b>Cálculo:</b> Sube el potenciómetro para dar más empuje y frenar la caída. Si tocas el suelo con velocidad de impacto mayor o igual a −6 m/s, aterrizas OK; si vas más rápido, se destruye. El botón físico reinicia el intento. La velocidad se muestra negativa porque representa movimiento hacia abajo — es normal.",
+          semNaranja: "🟡 En vuelo, V &lt; −3 m/s: cuidado / frena.",
+          semVerde: "🟢 En vuelo con V ≥ −3 m/s, o aterrizaje con V ≥ −6 m/s.",
+          semRojo:
+            "🔴 Solo al tocar el suelo con V &lt; −6 m/s: nave destruida.",
+        },
+        3: {
+          titulo: "Juego 4: Catapulta (Tiro Parabólico)",
+          concepto:
+            "<b>Concepto:</b> Composición de movimientos: MRU en el eje X (velocidad horizontal constante) y MRUA en el eje Y (la gravedad frena la subida y acelera la bajada). El resultado (verde/rojo) queda fijo en pantalla hasta el próximo disparo o hasta reiniciar.",
+          formula:
+            "v<sub>x</sub> = v<sub>0</sub>·cos(θ) &nbsp;&nbsp;|&nbsp;&nbsp; v<sub>y</sub> = v<sub>0</sub>·sin(θ) − g·t",
+          calculo:
+            "<b>Cálculo:</b> Gira el potenciómetro para fijar el ángulo θ y presiona el botón físico para disparar. Si el proyectil ya está en el aire, ese mismo botón cancela el disparo en curso. Apunta para que el proyectil caiga justo sobre la bandera.",
+          semNaranja: "🟡 Proyectil en vuelo.",
+          semVerde: "🟢 ¡Diste en el blanco!",
+          semRojo: "🔴 Fallaste el disparo.",
+        },
+      };
+
+      function actualizarPanelFisica(modo) {
+        if (modo === "R" || modo === "r") return;
+        const info = datosFisica[modo];
+        if (!info) return;
+        document.getElementById("info-titulo").innerText = info.titulo;
+        document.getElementById("info-concepto").innerHTML = info.concepto;
+        document.getElementById("info-formula").innerHTML = info.formula;
+        document.getElementById("info-calculo").innerHTML = info.calculo;
+        document.getElementById("sem-txt-naranja").innerHTML = info.semNaranja;
+        document.getElementById("sem-txt-verde").innerHTML = info.semVerde;
+        document.getElementById("sem-txt-rojo").innerHTML = info.semRojo;
+        document.getElementById("info-semaforo").style.display = "flex";
+      }
+
+      document
+        .getElementById("btnConectar")
+        .addEventListener("click", async () => {
+          try {
+            port = await navigator.serial.requestPort();
+            await port.open({ baudRate: 9600 });
+            document.getElementById("btnConectar").disabled = true;
+            document.getElementById("btnDesconectar").disabled = false;
+            uiInst.innerHTML = "<b>Estado:</b> Placa conectada correctamente.";
+
+            const textEncoder = new TextEncoderStream();
+            writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+            writer = textEncoder.writable.getWriter();
+
+            const textDecoder = new TextDecoderStream();
+            readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+            reader = textDecoder.readable.getReader();
+
+            keepReading = true;
+            let buffer = "";
+
+            while (keepReading) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              buffer += value;
+              let lineas = buffer.split("\n");
+              buffer = lineas.pop();
+              for (let linea of lineas) {
+                procesarTrama(linea.trim());
+              }
+            }
+          } catch (err) {
+            if (err.name !== "NotFoundError") alert("Error: " + err.message);
+          }
+        });
+
+      document
+        .getElementById("btnDesconectar")
+        .addEventListener("click", async () => {
+          keepReading = false;
+          if (reader) {
+            await reader.cancel();
+            reader = null;
+          }
+          if (writer) {
+            await writer.close();
+            writer = null;
+          }
+          if (port) {
+            await port.close();
+            port = null;
+          }
+          document.getElementById("btnConectar").disabled = false;
+          document.getElementById("btnDesconectar").disabled = true;
+          uiLCD.className = "lcd-container";
+          uiLine1.innerText = "DESCONECTADO";
+          uiLine2.innerText = "";
+        });
+
+      async function enviarComando(cmd) {
+        if (writer) {
+          try {
+            await writer.write(cmd);
+          } catch (e) {
+            console.error("Error comando", e);
+          }
+        }
+        actualizarPanelFisica(cmd);
+      }
+
+      function procesarTrama(trama) {
+        let p = trama.split("|");
+        if (p.length < 6) return;
+
+        let modo = p[0],
+          led = p[1],
+          animX = parseInt(p[2]),
+          animY = parseInt(p[3]);
+        uiLine1.innerText = p[4];
+        uiLine2.innerText = p[5];
+
+        uiLCD.className = "lcd-container";
+        if (led === "N") uiLCD.classList.add("led-naranja");
+        if (led === "V") uiLCD.classList.add("led-verde");
+        if (led === "R") uiLCD.classList.add("led-rojo");
+
+        document
+          .querySelectorAll(".sys-container")
+          .forEach((el) => (el.style.display = "none"));
+
+        // --- ASCENSOR ---
+        if (modo === "0") {
+          document.getElementById("ascensor-sys").style.display = "block";
+          let cabina = document.getElementById("cabina");
+          let cable = document.getElementById("cable");
+
+          if (animY === -1) {
+            cabina.style.top = "240px";
+            cable.style.height = "0px";
+            cabina.innerHTML = "💥";
+          } else {
+            let posPx = 240 - animY * 1.9;
+            cabina.style.top = posPx + "px";
+            cable.style.height = (led === "R" ? 0 : posPx) + "px";
+            cabina.innerHTML = led === "R" ? "😱" : "👷";
+          }
+        }
+        // --- CAJA ---
+        else if (modo === "1") {
+          document.getElementById("friccion-sys").style.display = "block";
+          let cajaWrap = document.getElementById("caja-wrapper");
+          let personaje = document.getElementById("caja-personaje");
+          let cajaBox = document.getElementById("caja-fisica");
+
+          cajaWrap.style.left = 20 + animX * 4.3 + "px";
+
+          if (led === "R") {
+            personaje.innerHTML = "🤦‍♂️";
+            cajaBox.innerHTML = "💥";
+          } else if (led === "V") {
+            personaje.innerHTML = "🙌";
+            cajaBox.innerHTML = "📦";
+          } else {
+            personaje.innerHTML = "🏃‍♂️";
+            cajaBox.innerHTML = "📦";
+          }
+        }
+        // --- LANDER ---
+        else if (modo === "2") {
+          document.getElementById("lander-sys").style.display = "block";
+          let cohete = document.getElementById("cohete");
+          let fuego = document.getElementById("fuego");
+          let altVisual = 230 - animY * 2.1;
+          cohete.style.top = altVisual + "px";
+          fuego.style.top = altVisual + 60 + "px";
+          fuego.style.display = led !== "R" && animY > 0 ? "block" : "none";
+          cohete.innerHTML = led === "R" ? "💥" : "🧑‍🚀";
+        }
+        // --- TIRO ---
+        else if (modo === "3") {
+          document.getElementById("tiro-sys").style.display = "block";
+          let proyectil = document.getElementById("proyectil");
+          let canon = document.getElementById("canon");
+          if (animX === 0 && animY === 0) {
+            let angulo = parseInt(p[4].substring(4, 6));
+            if (isNaN(angulo)) angulo = 45;
+            canon.style.transform = `rotate(-${angulo}deg)`;
+            proyectil.style.left = "10px";
+            proyectil.style.bottom = "10px";
+          } else {
+            proyectil.style.left = 10 + animX * 2.5 + "px";
+            proyectil.style.bottom = 10 + animY * 2.5 + "px";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

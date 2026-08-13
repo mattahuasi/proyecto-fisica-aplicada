@@ -5,6 +5,8 @@ Proyecto interactivo para enseñar y experimentar conceptos de Física I con dos
 - Modo real: conecta una placa Arduino por Serial Web y visualiza el estado en tiempo real.
 - Modo simulado: replica la misma lógica sin hardware, ideal para pruebas, demo y despliegue web.
 
+**Demo en vivo:** [https://proyecto-fisica-aplicada.netlify.app/](https://proyecto-fisica-aplicada.netlify.app/)
+
 El proyecto está diseñado para funcionar como sitio estático (local y hosting tipo Netlify), sin dependencias externas obligatorias.
 
 ## Objetivos del proyecto

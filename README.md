@@ -1,4 +1,4 @@
-# Laboratorio de Física con Arduino
+# Proyecto Física Aplicada
 
 Proyecto interactivo para enseñar y experimentar conceptos de Física I con dos modos de trabajo:
 

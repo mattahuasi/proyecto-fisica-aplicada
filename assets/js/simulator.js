@@ -22,6 +22,12 @@ function scenePx(value) {
   return Math.round(value * getSceneScale());
 }
 
+function sceneYPx(value) {
+  const box = document.querySelector(".anim-box");
+  if (!box) return value;
+  return Math.round(value * (box.clientHeight / 300));
+}
+
 function sceneX(value) {
   return getSceneOriginX() + scenePx(value);
 }
@@ -48,7 +54,7 @@ function ajustarEscena() {
 
   if (pisoMeta) {
     pisoMeta.style.left = `${sceneX(230)}px`;
-    pisoMeta.style.top = `${scenePx(50)}px`;
+    pisoMeta.style.top = `${sceneYPx(50)}px`;
     pisoMeta.style.width = `${scenePx(140)}px`;
   }
   if (cable) {
@@ -58,23 +64,23 @@ function ajustarEscena() {
   if (cabina) {
     cabina.style.left = `${sceneX(265)}px`;
     cabina.style.width = `${scenePx(70)}px`;
-    cabina.style.height = `${scenePx(60)}px`;
+    cabina.style.height = `${sceneYPx(60)}px`;
   }
   if (metaCaja) {
     metaCaja.style.left = `${sceneX(450)}px`;
     metaCaja.style.width = `${scenePx(100)}px`;
-    metaCaja.style.height = `${scenePx(60)}px`;
+    metaCaja.style.height = `${sceneYPx(60)}px`;
   }
   if (cajaWrap) cajaWrap.style.left = `${sceneX(20)}px`;
   if (cohete) {
     cohete.style.left = `${sceneX(275)}px`;
     cohete.style.width = `${scenePx(50)}px`;
-    cohete.style.height = `${scenePx(60)}px`;
+    cohete.style.height = `${sceneYPx(60)}px`;
   }
   if (fuego) {
     fuego.style.left = `${sceneX(290)}px`;
     fuego.style.width = `${scenePx(20)}px`;
-    fuego.style.height = `${scenePx(30)}px`;
+    fuego.style.height = `${sceneYPx(30)}px`;
   }
   if (canon) {
     canon.style.left = `${sceneX(10)}px`;
@@ -82,7 +88,7 @@ function ajustarEscena() {
   }
   if (proyectil) {
     proyectil.style.left = `${sceneX(10)}px`;
-    proyectil.style.bottom = `${scenePx(10)}px`;
+    proyectil.style.bottom = `${sceneYPx(10)}px`;
   }
   if (diana) {
     diana.style.left = `${sceneX(450)}px`;
@@ -187,6 +193,15 @@ function actualizarPanelFisica(modo) {
   document.getElementById("sem-txt-verde").innerHTML = info.semVerde;
   document.getElementById("sem-txt-rojo").innerHTML = info.semRojo;
   document.getElementById("info-semaforo").style.display = "flex";
+  setJuegoActivo(modo);
+}
+
+function setJuegoActivo(modo) {
+  document.querySelectorAll(".btn-juego[data-juego]").forEach((button) => {
+    const activo = button.dataset.juego === String(modo);
+    button.classList.toggle("is-active", activo);
+    button.setAttribute("aria-pressed", String(activo));
+  });
 }
 
 function resetJuego() {
@@ -242,6 +257,8 @@ function procesarTrama(trama) {
   const animX = parseInt(p[2], 10);
   const animY = parseInt(p[3], 10);
 
+  setJuegoActivo(modo);
+
   uiLine1.innerText = p[4];
   uiLine2.innerText = p[5];
 
@@ -260,14 +277,15 @@ function procesarTrama(trama) {
     const cable = document.getElementById("cable");
 
     if (animY === -1) {
-      cabina.style.top = `${scenePx(240)}px`;
+      cabina.style.top = `${sceneYPx(240)}px`;
       cable.style.height = "0px";
       setSceneFigure(cabina, "assets/images/cabin-fail.svg", "Cabina fallida");
       cabina.classList.add("status-fail");
     } else {
-      const posPx = 240 - animY * 1.9;
-      cabina.style.top = `${scenePx(posPx)}px`;
-      cable.style.height = `${scenePx(led === "R" ? 0 : posPx)}px`;
+      const animacionVisualY = led === "R" ? (animY * animY) / 100 : animY;
+      const posPx = 240 - animacionVisualY * 1.9;
+      cabina.style.top = `${sceneYPx(posPx)}px`;
+      cable.style.height = `${sceneYPx(led === "R" ? 0 : posPx)}px`;
       setSceneFigure(
         cabina,
         led === "R"
@@ -300,8 +318,8 @@ function procesarTrama(trama) {
     const cohete = document.getElementById("cohete");
     const fuego = document.getElementById("fuego");
     const altVisual = 230 - animY * 2.1;
-    cohete.style.top = `${scenePx(altVisual)}px`;
-    fuego.style.top = `${scenePx(altVisual + 60)}px`;
+    cohete.style.top = `${sceneYPx(altVisual)}px`;
+    fuego.style.top = `${sceneYPx(altVisual + 60)}px`;
     fuego.style.display = led !== "R" && animY > 0 ? "block" : "none";
     setSceneFigure(
       cohete,
@@ -317,11 +335,11 @@ function procesarTrama(trama) {
       let angulo = parseInt(p[4].substring(4, 6), 10);
       if (Number.isNaN(angulo)) angulo = 45;
       canon.style.transform = `rotate(-${angulo}deg)`;
-      proyectil.style.left = "10px";
-      proyectil.style.bottom = "10px";
+      proyectil.style.left = `${sceneX(10)}px`;
+      proyectil.style.bottom = `${sceneYPx(10)}px`;
     } else {
-      proyectil.style.left = 10 + animX * 2.5 + "px";
-      proyectil.style.bottom = 10 + animY * 2.5 + "px";
+      proyectil.style.left = `${sceneX(10 + animX * 2.5)}px`;
+      proyectil.style.bottom = `${sceneYPx(10 + animY * 2.5)}px`;
     }
   }
 }
@@ -537,4 +555,5 @@ window.addEventListener("pointerup", () => setPulso(false));
 
 potValue.textContent = potSlider.value;
 setPulso(false);
+actualizarPanelFisica("0");
 requestAnimationFrame(simularPaso);
